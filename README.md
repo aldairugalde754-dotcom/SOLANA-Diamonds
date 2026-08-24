@@ -1,124 +1,185 @@
 <div align="center">
 
-![# CertChai --- SOLANA Diamonds](./public/images/Nutria.png)
- # CertChai --- SOLANA Diamonds
+![SOLANA Diamonds](./public/images/Nutria.png)
 
-### Certificación, trazabilidad mediante cNFTs en Solana
+# SOLANA Diamonds
+
+### Certificación, trazabilidad y comercio de productos mediante cNFTs en Solana
 
 </div>
 
 ---
 
-## 📖 Descripción
+## Descripción general
 
-**CertChain** es una plataforma Web3 integral diseñada para la **certificación, trazabilidad, comercio y subasta** de certificados de autenticidad para diferente productos, mediante **cNFTs (Compressed NFTs)** sobre la red de **Solana (Devnet)**.
+**SOLANA Diamonds** es una plataforma Web3 para la **certificación, trazabilidad, validación y comercialización** de productos mediante **cNFTs (Compressed NFTs)** sobre la red de **Solana**.
+
+El sistema está diseñado para que empresas, coleccionistas, distribuidores y compradores puedan certificar la autenticidad de un producto, verificar su historial de propiedad y realizar transferencias o subastas de forma segura mediante la blockchain.
+
+![](./public/images/demostracion.png)
 
 El proyecto combina una arquitectura híbrida:
 
-- 🔒 **Off-Chain** — Gestion de usuarios y validacion de las tranzacciones mediante MySQL.
-- ⛓️ **On-Chain** — Logica Solida del proyecto mediante un SmartContract de SOLANA para las operaciones, validaciones y creacion de los cNFTS.
+- 🔒 **Off-chain**: autenticación de usuarios, reglas del negocio, gestión de transacciones y almacenamiento relacional.
+- ⛓️ **On-chain**: lógica de validación, emisión de certificados y trazabilidad basada en el smart contract de Solana.
 
-## 🏗️ Arquitectura del sistema
+---
+
+## ¿Qué problema resuelve?
+
+Muchas industrias necesitan certificar de forma confiable la procedencia, autenticidad y trazabilidad de un producto. Con Solana y cNFTs, el proyecto permite:
+
+- emitir certificados digitales únicos y verificables,
+- vincular cada certificado a un producto real,
+- evitar falsificaciones mediante evidencia on-chain,
+- registrar cambios de propietario y custodia,
+- facilitar transacciones, subastas y marketplace interno.
+
+---
+
+## Arquitectura del sistema
 
 ```mermaid
 flowchart TD
-    A[" React / Vite Frontend"] -->|API REST / JWT| B["Microservicio Backend (Privado)"]
-    B --> C[" Base de Datos <br/>(Reglas, Subastas, Auth)"]
-    B --> D[" Pinata IPFS<br/>(Imágenes y Metadatos JSON)"]
-    A -->|Solana Wallet Adapter| E[" Solana Devnet / Helius DAS API"]
-    E --> F[" Smart Contract (Anchor)"]
-```
-
-### 🧰 Stack tecnológico
-
-| Capa | Tecnologías |
-|---|---|
-| **Frontend** | React + Vite + Tailwind CSS + Solana Wallet Adapter |
-| **Blockchain & Web3** | Solana Devnet + Helius DAS API + Anchor Framework (Rust) |
-| **Almacenamiento descentralizado** | Pinata IPFS SDK y metadatos JSON dinámicos estándar Metaplex) |
-
----
-
-## 👥 Funcionalidades por rol de usuario
-
-### 🏢 Módulo Empresa (Emisores )
-
-- ✨ **Emisión de cNFTs dinámicos** — generación de certificados comprimidos vinculando imágenes del producto y metadatos JSON, subidos automáticamente a Pinata IPFS.
-- 🗃️ **Almacenamiento de cNFTs** — panel para visualizar y gestionar la colección de certificados emitidos.
-- 📱 **Generación de código QR de verificación** — creación de QR para adjuntar físicamente a las piezas, permitiendo autenticación instantánea.
-- 🔨 **Creación de subastas** — configuración de precio base, incrementos mínimos y tiempos de finalizacion.
-- 🔁 **Transferencias directas (P2P)** — envíos seguros de certificados a wallets de clientes tras ventas privadas o en tienda física.
-- ✅ **Verificación de autenticidad** — auditoría del estado del cNFT en tiempo real sobre la blockchain.
-
-### 👤 Módulo Cliente / Coleccionista
-
-- 🗄️ **Bóveda personal de certificados** — visualización de la propiedad de piezas en la wallet conectada.
-- 🛒 **Compra directa en marketplace** — adquisición de certificados mediante firma de transacciones en Solana.
-- 🏷️ **Participación en subastas** — pujas en tiempo real, ofertas e historial actualizado.
-- 🔍 **Historial con cadena de custodia** — explorador visual de trazabilidad: transferencias anteriores, timestamps y dueños previos.
-- 💱 **Reventa en marketplace** — listado de piezas certificadas en el mercado secundario.
-- 🔁 **Transferencias P2P** — envío directo de certificados a otras wallets.
-
----
-
-## 📦 Almacenamiento descentralizado con Pinata IPFS
-
-La plataforma utiliza **Pinata** para garantizar que los activos digitales de cada certificado permanezcan inmutables y accesibles de forma descentralizada:
-
-1. **Procesamiento de imágenes** — las fotografías en alta definición se suben al cluster de IPFS, generando un *Content Identifier* (CID) único.
-2. **Generación de metadatos JSON dinámicos** — se construye un archivo JSON conforme al estándar **Metaplex**, incluyendo atributos del producto.
-3. **Vinculación on-chain** — la URI devuelta por Pinata (`ipfs://...`) se inscribe permanentemente en la estructura del cNFT durante la acuñación en Solana.
-
----
-
-## 🛠️ Variables de entorno (Frontend)
-
-Crea un archivo `.env` en la raíz del proyecto:
-
-```env
-VITE_API_BASE_URL= Base URL Vercel
-VITE_SOLANA_RPC_URL= Api de Helius
-VITE_DAS_RPC=https: DAS API Helius
+    A["Frontend React + Vite"] -->|API REST / JWT| B["Backend Express"]
+    B --> C["MySQL / Base de datos"]
+    B --> D["Pinata IPFS"]
+    A -->|Wallet Adapter| E["Solana Devnet / Helius DAS API"]
+    E --> F["Smart Contract Anchor / Rust"]
 ```
 
 ---
 
-## ⚡ Instalación y ejecución local
+## Stack tecnológico
 
-**1. Clonar el repositorio**
+| Capa | Tecnología |
+| --- | --- |
+| Frontend | React, Vite, TypeScript, Tailwind CSS |
+| Blockchain | Solana, Web3.js, Anchor, Wallet Adapter |
+| NFTs comprimidos | Metaplex Bubblegum, Umi, cNFTs |
+| Backend | Node.js, Express, MySQL |
+| Almacenamiento digital | Pinata IPFS |
+| Validación | JWT, middleware express, reglas de negocio personalizadas |
+
+---
+
+## Funcionalidades principales
+
+### Módulo empresa / emisor
+
+- Emisión de certificados digitales en formato cNFT.
+- Asociación de certificados con imágenes, metadatos y atributos del producto.
+- Generación de códigos QR para verificación física.
+- Creación y administración de subastas.
+- Transferencias directas entre wallets.
+- Visualización y administración del inventario de certificados emitidos.
+- Verificación de autenticidad y estado del certificado en la blockchain.
+
+### Módulo cliente / comprador
+
+- Consulta de certificados en su wallet conectada.
+- Compra directa en marketplace.
+- Participación en subastas.
+- Historial de trazabilidad y custodia.
+- Reventa o transferencia a otras wallets.
+- Verificación de autenticidad en tiempo real.
+
+---
+
+## Flujo de trabajo
+
+1. La empresa crea un certificado para un producto y sube su imagen y metadatos.
+2. El backend procesa el contenido y lo publica en IPFS a través de Pinata.
+3. Se emite el cNFT asociado al certificado sobre Solana.
+4. El comprador o cliente recibe el token en su wallet.
+5. Cualquier persona puede verificar la autenticidad del producto consultando la blockchain y el historial asociado.
+
+---
+
+## Estructura del proyecto
+
+```text
+.
+├── backend/                  # API backend en Node.js + Express
+│   ├── idl/                  # archivos del smart contract y utilidades
+│   ├── uploads/              # almacenamiento local de imágenes
+│   ├── server.js             # servidor principal
+│   ├── pinataService.js      # integración con Pinata
+│   ├── auctionBidRules.js    # reglas de subasta
+│   └── package.json
+├── public/                   # recursos públicos y assets
+├── services/                 # servicios auxiliares
+├── src/                      # frontend React/Vite
+├── smartContract.rs          # lógica del contrato smart contract
+├── package.json              # dependencias del frontend
+├── vite.config.ts
+├── tsconfig.json
+├── vercel.json
+├── index.html
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Requisitos previos
+
+- Node.js 18+
+- pnpm
+- Cuenta de Solana con wallet compatible (Phantom, Solflare, etc.)
+- Acceso a una RPC de Solana (Helius o equivalente)
+- Cuenta Pinata para subir metadatos e imágenes a IPFS
+- Base de datos MySQL (si se usa la parte off-chain del backend)
+
+---
+
+## Instalación y ejecución local
+
+### 1) Clonar el repositorio
 
 ```bash
-git clone https://github.com/aldairugalde754-dotcom/CertChain-SOLANA.git
-cd CertChain-SOLANA
+git clone https://github.com/aldairugalde754-dotcom/SOLANA-Diamonds.git
+cd SOLANA-Diamonds
 ```
 
-**2. Instalar dependencias con PNPM**
+### 2) Instalar dependencias
 
 ```bash
 pnpm install
 ```
 
-**3. Iniciar el servidor de desarrollo**
+### 3) Instalar dependencias del backend
+
+```bash
+cd backend
+pnpm install
+cd ..
+```
+
+### 4) Ejecutar frontend
 
 ```bash
 pnpm run dev
 ```
 
----
+### 5) Ejecutar backend
 
-## 🔮 Roadmap futuro
-
-- [ ] Hacer una versión en app móvil para facilitar el uso de la cámara en verificaciones de códigos y transacciones rápidas.
-- [ ] Mayor usabilidad en creación de cuentas integrando login con cuentas de google y creación automática de la Wallet.
-- [ ] Oculamentieno y protocolo de enlaces para los merkle Trees
-- [ ] Códigos QR para direcciones de wallet, con ello integrar las transferencias mediante los QR.
-- [ ] Darle acceso a los usuarios para poder realizar subastas
-- [ ] Mayor desarrollo en los datos de las empresas para desarrollar tiendas en línea dentro de la plataforma para cada empresa.
-- [ ] Disminuir la interacción con términos de blockchain desconocidos para el usuario común para ofrecer mayor usabilidad.
-
+```bash
+cd backend
+pnpm run dev
+```
 
 ---
 
-<div align="center">
 
-</div>
+## Roadmap futuro
+
+- [ ] Mejorar la UX para usuarios no técnicos en Web3.
+- [ ] Integración con login social y creación automática de wallets.
+- [ ] Expansión del marketplace y soporte para venta secundaria.
+- [ ] Optimización de trazabilidad con eventos y auditaría más amigable.
+- [ ] Mejoras en QR, seguimiento y validación de certificados físicos.
+- [ ] Soporte móvil y experiencia de verificación desde cámara.
+- [ ] Nuevos módulos empresariales para tiendas, distribuciones y gestión de inventario.
+
+---
