@@ -45,7 +45,7 @@ flowchart TD
 - ✨ **Emisión de cNFTs dinámicos** — generación de certificados comprimidos vinculando imágenes del producto y metadatos JSON, subidos automáticamente a Pinata IPFS.
 - 🗃️ **Almacenamiento de cNFTs** — panel para visualizar y gestionar la colección de certificados emitidos.
 - 📱 **Generación de código QR de verificación** — creación de QR para adjuntar físicamente a las piezas, permitiendo autenticación instantánea.
-- 🔨 **Creación de subastas ** — configuración de precio base, incrementos mínimos y tiempos de finalizacion.
+- 🔨 **Creación de subastas** — configuración de precio base, incrementos mínimos y tiempos de finalizacion.
 - 🔁 **Transferencias directas (P2P)** — envíos seguros de certificados a wallets de clientes tras ventas privadas o en tienda física.
 - ✅ **Verificación de autenticidad** — auditoría del estado del cNFT en tiempo real sobre la blockchain.
 
