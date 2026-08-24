@@ -1,9 +1,6 @@
 use anchor_lang::prelude::*;
 use mpl_bubblegum::instructions::TransferCpiBuilder;
 
-// ⚠️ Este es un placeholder VÁLIDO en formato base58, pero NO es tu program ID real.
-// Después de compilar por primera vez, corre `anchor keys list` (o `solana address -k target/deploy/certchain-keypair.json`)
-// y reemplaza este valor por el ID real generado para tu programa.
 declare_id!("3dhSvYubK3XUhE5QdfYTgxJnc3rCdyU5Nt1TcjeC6K6a");
 
 #[program]
@@ -26,8 +23,6 @@ pub mod certchain {
         Ok(())
     }
 
-    /// Permite al admin pausar/reanudar la emisión de nuevos certificados
-    /// (usa el campo `activo` que antes se guardaba pero nunca se comprobaba).
     pub fn establecer_estado_registro(ctx: Context<AdminRegistro>, activo: bool) -> Result<()> {
         ctx.accounts.registro_global.activo = activo;
         Ok(())
@@ -180,7 +175,7 @@ pub mod certchain {
         let precio = cert.precio_sol;
         let bps = ctx.accounts.registro_global.tasa_plataforma_bps as u64;
 
-        // Comisión de la plataforma (antes se definía tasa_plataforma_bps pero nunca se cobraba)
+        // Comisión de la plataforma
         let comision = precio
             .checked_mul(bps)
             .ok_or(ErrorCodigo::Overflow)?
@@ -202,7 +197,7 @@ pub mod certchain {
             ],
         )?;
 
-        // Comisión al admin de la plataforma (solo si > 0)
+        // Comisión al admin de la plataforma
         if comision > 0 {
             anchor_lang::solana_program::program::invoke(
                 &anchor_lang::solana_program::system_instruction::transfer(
@@ -249,14 +244,6 @@ pub mod certchain {
         Ok(())
     }
 
-    /// NOTA DE DISEÑO: esta instrucción solo puede ser llamada por quien figura
-    /// como `propietario` on-chain. Si el certificado fue robado mediante el
-    /// compromiso de la clave privada original y el atacante ya ejecutó una
-    /// transferencia, el atacante pasa a ser el `propietario` registrado y el
-    /// dueño legítimo ya NO puede usar esta función. Para un mecanismo de
-    /// "reportar robo" realmente útil, considera permitir que el `emisor`
-    /// (institución emisora) congele un certificado a partir de un reporte
-    /// off-chain, en vez de depender únicamente de la firma del propietario actual.
     pub fn reportar_robo(ctx: Context<ReportarRobo>) -> Result<()> {
         let cert = &mut ctx.accounts.certificado;
         require!(
@@ -366,7 +353,7 @@ pub struct EmitirCertificado<'info> {
         bump
     )]
     pub certificado: Account<'info, Certificado>,
-    /// CHECK: cuenta del receptor inicial del cNFT, no requiere validación de datos
+    /// CHECK: cuenta del receptor inicial del cNFT
     pub receptor: AccountInfo<'info>,
     #[account(mut)]
     pub autoridad: Signer<'info>,
@@ -384,18 +371,12 @@ pub struct TransferirGratuito<'info> {
     pub certificado: Account<'info, Certificado>,
     #[account(mut)]
     pub propietario: Signer<'info>,
-    /// CHECK: cuenta del nuevo propietario, solo se usa como destino
     pub nuevo_propietario: AccountInfo<'info>,
-    /// CHECK: Bubblegum Tree Config Account, validada por el propio CPI de Bubblegum
     pub tree_config: AccountInfo<'info>,
-    /// CHECK: Merkle Tree Account, validada por el propio CPI de Bubblegum
     #[account(mut)]
     pub merkle_tree: AccountInfo<'info>,
-    /// CHECK: SPL Compression Log Wrapper, validada por el propio CPI
     pub log_wrapper: AccountInfo<'info>,
-    /// CHECK: SPL Compression Program, validada por el propio CPI
     pub compression_program: AccountInfo<'info>,
-    /// CHECK: Bubblegum Program, validada por el propio CPI
     pub bubblegum_program: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
 }
@@ -421,9 +402,6 @@ pub struct CancelarVenta<'info> {
         has_one = propietario @ ErrorCodigo::NoEsPropietario
     )]
     pub certificado: Account<'info, Certificado>,
-    // Antes había una cuenta `vendedor` sin firmar y un `firmante` separado
-    // sin ninguna relación entre ambos: cualquiera podía cancelar la venta
-    // de otra persona. Ahora el propio propietario debe firmar.
     pub propietario: Signer<'info>,
 }
 
@@ -443,25 +421,18 @@ pub struct ComprarDirecto<'info> {
     pub registro_global: Account<'info, RegistroGlobal>,
     #[account(mut)]
     pub comprador: Signer<'info>,
-    /// CHECK: cuenta del vendedor, validada contra certificado.propietario arriba
     #[account(mut)]
     pub vendedor: AccountInfo<'info>,
-    /// CHECK: debe coincidir con registro_global.admin, verificado abajo
     #[account(
         mut,
         constraint = admin.key() == registro_global.admin @ ErrorCodigo::NoAutorizado
     )]
     pub admin: AccountInfo<'info>,
-    /// CHECK: Bubblegum Tree Config, validada por el propio CPI
     pub tree_config: AccountInfo<'info>,
-    /// CHECK: Merkle Tree Account, validada por el propio CPI
     #[account(mut)]
     pub merkle_tree: AccountInfo<'info>,
-    /// CHECK: SPL Compression Log Wrapper, validada por el propio CPI
     pub log_wrapper: AccountInfo<'info>,
-    /// CHECK: SPL Compression Program, validada por el propio CPI
     pub compression_program: AccountInfo<'info>,
-    /// CHECK: Bubblegum Program, validada por el propio CPI
     pub bubblegum_program: AccountInfo<'info>,
     pub system_program: Program<'info, System>,
 }
