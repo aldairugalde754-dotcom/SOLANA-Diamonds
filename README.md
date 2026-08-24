@@ -1,6 +1,7 @@
 <div align="center">
 
-# CertChai --- SOLANA Diamonds
+![# CertChai --- SOLANA Diamonds](./public/images/logo.png)
+ # CertChai --- SOLANA Diamonds
 
 ### Certificación, trazabilidad mediante cNFTs en Solana
 
