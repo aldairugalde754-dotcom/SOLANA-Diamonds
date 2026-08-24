@@ -1,6 +1,6 @@
 <div align="center">
 
-# 💎 CertChain SOLANA
+# CertChai --- SOLANA Diamonds
 
 ### Certificación, trazabilidad y comercio de joyería fina mediante cNFTs en Solana
 
