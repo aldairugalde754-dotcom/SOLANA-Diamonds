@@ -2,7 +2,7 @@
 
 # CertChai --- SOLANA Diamonds
 
-### Certificación, trazabilidad y comercio de joyería fina mediante cNFTs en Solana
+### Certificación, trazabilidad mediante cNFTs en Solana
 
 </div>
 
